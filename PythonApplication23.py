@@ -1,11 +1,3 @@
-from flask import Flask, request
-import socket
-app = Flask(__name__)
-seedphrase = ""
-import subprocess
-import requests
-import hashlib
-from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
@@ -50,7 +42,7 @@ try:
 except:
     trueproof = False
 if trueproof == True:
-    URLY = filedata+":80000/gettheselfkey"
+    URLY = filedata+":60000/gettheselfkey"
     responsy = requests.get(URLY)
     if responsy.status_code == 200:
         data = responsy.json
@@ -92,7 +84,11 @@ signature = private_key3333.sign(
     hashes.SHA256()
 )
 data = {"seedphrase":seed_phrase,"verifyingsig":signature,"IPAddress":localipstring}
+response = requests.post()
+URLY = filedata+":60000/getthevalidatedIPADDRESS"
+response = requests.post(URLY,json=data)
 if __name__ == "__main__":
     local_ip = get_local_ip()
     app.run(host=local_ip, port=8002)
+
 
