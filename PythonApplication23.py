@@ -181,7 +181,7 @@ try:
 except:
     trueproof = False
 if trueproof == True:
-    URLY = filedata+":6000/gettheselfkey"
+    URLY = filedata+":8000/gettheselfkey"
     responsy = requests.get(URLY)
     if responsy.status_code == 200:
         data = responsy.json
@@ -224,7 +224,7 @@ signature = private_key3333.sign(
 )
 data = {"seedphrase":seed_phrase,"verifyingsig":signature,"IPAddress":localipstring}
 response = requests.post()
-URLY = filedata+":6000/getthevalidatedIPADDRESS"
+URLY = filedata+":8000/getthevalidatedIPADDRESS"
 response = requests.post(url=URLY,json=data)
 def loop1():
     time.sleep(100)
@@ -240,7 +240,7 @@ def loop1():
       message.encode('utf-8'),
       ec.ECDSA(hashes.SHA256()) 
      )
-     URLY=filedata+":6000/checkplaceinternetspeed"
+     URLY=filedata+":8000/checkplaceinternetspeed"
      stuffdata = {"seedphrase":seedphrase,"verifyingsig":signature,"internespeed":filedatey}
 thread1 = threading.Thread(target=loop1)
 thread1.start()
