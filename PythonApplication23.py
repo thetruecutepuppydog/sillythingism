@@ -164,7 +164,7 @@ signature = private_key3333.sign(
     message.encode('utf-8'),
     ec.ECDSA(hashes.SHA256())
 )
-data = {"seedphrase": base64.b64encode(seed_phrase).decode('utf-8), "verifyingsig":base64.b64encode(signature).decode('utf-8'), "IPAddress": localipstring}
+data = {"seedphrase": base64.b64encode(seed_phrase).decode('utf-8'), "verifyingsig":base64.b64encode(signature).decode('utf-8'), "IPAddress": localipstring}
 
 URLY = filedata + "/getthevalidatedIPADDRESS"
 response = requests.post(url=URLY, json=data)
