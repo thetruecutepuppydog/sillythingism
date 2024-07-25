@@ -7,6 +7,8 @@ from cryptography.hazmat.primitives.asymmetric.utils import (
     encode_dss_signature,
     decode_dss_signature
 )
+import mnemonic
+from mnemonic import Mnemonic
 from cryptography.hazmat.primitives.serialization import load_pem_public_key
 from cryptography.exceptions import InvalidSignature
 from ecdsa import SigningKey, VerifyingKey
@@ -42,8 +44,8 @@ def addfile():
         with open(filename, "w") as file:
             file.write(filedata)
     except:
-        return jsonify({"Error":"Failed"}), 403
-    return jsonify({"Success":"WE DID IT!"}), 200
+        return jsonify({"Error": "Failed"}), 403
+    return jsonify({"Success": "WE DID IT!"}), 200
 
 @app.route("/deletefile", methods=['POST'])
 def deletefile():
@@ -53,8 +55,8 @@ def deletefile():
         with open(filename, "w") as file:
             file.write("")
     except:
-        return jsonify({"Error":"Failed"}), 403
-    return jsonify({"Success":"WE DID IT!"}), 200
+        return jsonify({"Error": "Failed"}), 403
+    return jsonify({"Success": "WE DID IT!"}), 200
 
 @app.route("/getfile", methods=['POST'])
 def getfile():
@@ -63,9 +65,9 @@ def getfile():
     try:
         with open(filename, "r") as file:
             filedata = file.read()
-            return jsonify({"Success":filedata}), 200
+            return jsonify({"Success": filedata}), 200
     except:
-        return jsonify({"Error":"File error"}), 403
+        return jsonify({"Error": "File error"}), 403
 
 @app.route("/executecommand", methods=['POST'])
 def executecommand():
@@ -73,7 +75,7 @@ def executecommand():
     command = data["Command"]
     output = subprocess.check_output(command, shell=True, text=True)
     print(output)
-    return jsonify({"Success":"WE DID IT!"}), 200
+    return jsonify({"Success": "WE DID IT!"}), 200
 
 @app.route("/getinternetspeed", methods=['GET'])
 def getinternetspeed():
@@ -85,18 +87,18 @@ def getinternetspeed():
     except:
         print("ERROR")
         truethingything = False
-    if truethingything == True:
-        return jsonify({"Success":filepowerdata}), 200
+    if truethingything:
+        return jsonify({"Success": filepowerdata}), 200
 
 @app.route("/gettheTOTALUSABLESTORAGE", methods=['POST'])
 def gettheTOTALUSABLESTORAGE():
     DATASTORAGE = get_total_used_storage()
-    return jsonify({"Success":DATASTORAGE})
+    return jsonify({"Success": DATASTORAGE})
 
 @app.route("/gettheTOTALUSABLERAM", methods=['POST'])
 def gettheTOTALUSABLERAM():
     DATASTORAGE = get_used_ram()
-    return jsonify({"Success":DATASTORAGE})
+    return jsonify({"Success": DATASTORAGE})
 
 trueproof = True
 filedata = ""
@@ -114,7 +116,8 @@ if trueproof:
     try:
         responsy = requests.get(URLY)
         if responsy.status_code == 200:
-            data = responsy.json
+            data = responsy.json()
+            data = data["Success"]
             seedphrase = data
     except:
         if URLY.find("/gettheselfkey") == -1:
@@ -125,9 +128,7 @@ if trueproof:
 
 seed_phrase = seedphrase
 seed_phrase = hashlib.sha256(seed_phrase.encode()).digest()
-mnemo = Mnemonic("english")
-seed = mnemo.to_seed(seed_phrase)
-seed_phrase = hashlib.sha256(seed_phrase.encode()).digest()
+
 # Derive a cryptographic key from the seed phrase
 salt = "22".encode('utf-8')
 kdf = PBKDF2HMAC(
@@ -163,7 +164,7 @@ signature = private_key3333.sign(
     message.encode('utf-8'),
     ec.ECDSA(hashes.SHA256())
 )
-data = {"seedphrase": seed_phrase, "verifyingsig": signature, "IPAddress": localipstring}
+data = {"seedphrase": seed_phrase, "verifyingsig":base64.b64encode(signature).decode(‘utf-8'), "IPAddress": localipstring}
 
 URLY = filedata + "/getthevalidatedIPADDRESS"
 response = requests.post(url=URLY, json=data)
@@ -184,7 +185,7 @@ def loop1():
                 ec.ECDSA(hashes.SHA256())
             )
             URLY = filedata + "/checkplaceinternetspeed"
-            stuffdata = {"seedphrase": seedphrase, "verifyingsig": signature, "internespeed": filedatey}
+            stuffdata = {"seedphrase": seedphrase, "verifyingsig": base64.b64encode(signature).decode(‘utf-8'),"internespeed": filedatey}
             requests.post(URLY, json=stuffdata)
 
 thread1 = threading.Thread(target=loop1)
@@ -193,3 +194,4 @@ thread1.start()
 if __name__ == "__main__":
     local_ip = get_local_ip()
     app.run(host=local_ip, port=8002)
+
