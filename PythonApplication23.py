@@ -25,7 +25,9 @@ import random
 from flask import Flask, request, jsonify
 import threading
 import subprocess
-
+typething = int(input("1. for not a special domain, and 2. for a special domain))
+if typething == 2:
+    specialdomain = input("What's the special domain?")
 app = Flask(__name__)
 
 def remove_newlines_and_spaces(text):
@@ -164,8 +166,10 @@ signature = private_key3333.sign(
     message.encode('utf-8'),
     ec.ECDSA(hashes.SHA256())
 )
-data = {"seedphrase": base64.b64encode(seed_phrase).decode('utf-8'), "verifyingsig":base64.b64encode(signature).decode('utf-8'), "IPAddress": localipstring}
-
+if typething == 1:
+ data = {"seedphrase": base64.b64encode(seed_phrase).decode('utf-8'), "verifyingsig":base64.b64encode(signature).decode('utf-8'), "IPAddress": localipstring+str(":8002")}
+else:
+ data = {"seedphrase": base64.b64encode(seed_phrase).decode('utf-8'), "verifyingsig":base64.b64encode(signature).decode('utf-8'), "IPAddress": specialdomain}
 URLY = filedata + "/getthevalidatedIPADDRESS"
 response = requests.post(url=URLY, json=data)
 
