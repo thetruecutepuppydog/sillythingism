@@ -44,8 +44,10 @@ def remove_newlines_and_spaces(text):
 	return text.replace(" ", "").replace("\n", "")
 
 def get_local_ip():
-	# Get the local IP address of the computer
-	return socket.gethostbyname(socket.gethostname())
+    response = requests.get('https://api.ipify.org?format=json')
+    response.raise_for_status()
+    ip_info = response.json()
+    return ip_info['ip']
 
 @app.route("/addfile", methods=['POST'])
 def addfile():
