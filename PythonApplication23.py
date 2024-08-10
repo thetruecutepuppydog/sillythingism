@@ -77,8 +77,8 @@ def getfile():
 	data = request.json
 	filename = data["filename"]
 	try:
-    	with open(filename, "r") as file:
-        	filedata = file.read()
+    	with open(filename, "rb") as file:
+        	filedata = base64.b64encode(file.read()).decode('utf-8')
         	return jsonify({"Success": filedata}), 200
 	except:
     	return jsonify({"Error": "File error"}), 403
