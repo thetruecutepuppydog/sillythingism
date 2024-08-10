@@ -77,11 +77,11 @@ def getfile():
 	data = request.json
 	filename = data["filename"]
 	try:
-    	with open(filename, "rb") as file:
+    	 with open(filename, "rb") as file:
         	filedata = base64.b64encode(file.read()).decode('utf-8')
         	return jsonify({"Success": filedata}), 200
 	except:
-    	return jsonify({"Error": "File error"}), 403
+    	 return jsonify({"Error": "File error"}), 403
 
 @app.route("/executecommand", methods=['POST'])
 def executecommand():
@@ -96,13 +96,13 @@ def getinternetspeed():
 	truethingything = True
 	filepowerdata = ""
 	try:
-    	with open("internetspeed.txt") as file:
+    	 with open("internetspeed.txt") as file:
         	filepowerdata = file.read()
 	except:
     	print("ERROR")
     	truethingything = False
 	if truethingything:
-    	return jsonify({"Success": filepowerdata}), 200
+    	r eturn jsonify({"Success": filepowerdata}), 200
 
 @app.route("/gettheTOTALUSABLESTORAGE", methods=['POST'])
 def gettheTOTALUSABLESTORAGE():
@@ -128,15 +128,15 @@ if trueproof:
 	print("URLY: " + str(URLY))
 	print("Len: " + str(len(URLY)))
 	try:
-    	responsy = requests.get(URLY)
-    	if responsy.status_code == 200:
+    	 responsy = requests.get(URLY)
+    	 if responsy.status_code == 200:
         	data = responsy.json()
         	print("DATA: "+str(data))
         	data = data["Success"]
         	seedphrase = data
-    	print("HOW ARE WE HErE")
+    	 print("HOW ARE WE HErE")
 	except Exception as e:
-    	print("ERROR: "+str(e))
+    	 print("ERROR: "+str(e))
     	if URLY.find("/gettheselfkey") == -1:
         	print("Sense")
     	else:
